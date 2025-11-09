@@ -159,62 +159,8 @@ graph TD
 
 ---
 
-## 5. DevOps, Delivery & Runtime Options
 
-### 5.1 Local orchestration
-
-- `docker-compose.yml` spins up MySQL, MongoDB, the Spring Boot backend, and a React build served through Nginx. Health checks are configured for the backend (`/actuator/health`), MySQL, and Mongo.
-- The root `Makefile` provides automation targets for building and running backend/frontend code, generating Docker images, managing Kubernetes manifests, and generating OpenAPI clients.
-- Helper scripts in `scripts/` (e.g., `build-images.sh`, `deploy-k8s.sh`, `test-backend.sh`) encapsulate common workflows.
-
-### 5.2 Kubernetes manifests
-
-- `kubernetes/` contains raw manifests for backend/frontend deployments and services plus a config map. The manifests currently mount code via `hostPath` volumes and expose container ports `3000`/`3001`; align these values with the Spring Boot (`8080`) and React build (`80`) ports before production use.
-
-### 5.3 Terraform stack
-
-- `terraform/` defines a modular AWS deployment comprising VPC networking, an EKS cluster, managed node groups, an RDS MySQL instance, and ECR repositories. Modules use `terraform-aws-modules/*` under the hood and output cluster credentials and repository URLs.
-
-```mermaid
-flowchart LR
-    DevEnv[Developer Workstation]
-    Jenkins[Jenkins Pipeline]
-    ECR[ECR Repositories]
-    EKS[EKS Cluster]
-    RDS[(RDS MySQL)]
-
-    DevEnv -->|git push| Jenkins
-    Jenkins -->|docker build & push| ECR
-    ECR -->|pull images| EKS
-    EKS -->|JDBC 3306| RDS
-
-    subgraph Local Tooling
-        Compose[Docker Compose]
-        Scripts[Makefile + scripts]
-    end
-    DevEnv --> Compose
-    DevEnv --> Scripts
-
-    subgraph AWS
-        VPC[VPC & Subnets]
-        VPC --> EKS
-        VPC --> RDS
-    end
-    Jenkins -->|terraform apply| VPC
-```
-
-### 5.4 CI/CD
-
-- The repository includes a simple Jenkins pipeline (`Jenkinsfile`) that installs frontend dependencies (`npm install`) and builds the React bundle (`npm run build`). Additional stages (tests, Docker builds, deployments) can be added as the stack matures.
-
-### 5.5 Ancillary assets
-
-- `nginx/` holds a Dockerfile and configuration intended for load balancing. The current config proxies to `moodify-emotion-music-app.onrender.com`, indicating it is a placeholder that must be replaced with the Employee Management services before reuse.
-- Image assets for documentation are stored under `img/` and referenced by `README.md`.
-
----
-
-## 6. Security & Compliance Considerations
+## 5. Security & Compliance Considerations
 
 - **Authentication & authorization**: Although JWT utilities exist, all endpoints are effectively public. Hardening requires registering `JwtRequestFilter`, protecting controller methods with `@PreAuthorize` or request matchers, and storing secrets securely.
 - **Secrets management**: Replace the checked-in credentials in `backend/config.properties` with environment-specific secrets (AWS Secrets Manager, SSM Parameter Store, or Kubernetes Secrets) before production deployment.
@@ -260,8 +206,6 @@ flowchart TD
 | Entities | `backend/src/main/java/com/example/employeemanagement/model` |
 | Security configuration | `backend/src/main/java/com/example/employeemanagement/security` |
 | Data seeding | `backend/src/main/java/com/example/employeemanagement/config/DataInitializer.java` |
-| Docker Compose | `docker-compose.yml` |
-| Kubernetes manifests | `kubernetes/` |
 | Terraform AWS stack | `terraform/` |
 | Scripts & automation | `scripts/` and `Makefile` |
 
