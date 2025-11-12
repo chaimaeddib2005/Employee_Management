@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/YOUR_USERNAME/Employee-Management-Fullstack-App.git'
+                git branch: 'master', url: 'https://github.com/chaimaeddib2005/Employee_Management.git'
             }
         }
 
