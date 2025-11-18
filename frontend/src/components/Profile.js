@@ -3,7 +3,7 @@ import { Box, Typography, Button, CircularProgress, Snackbar, Alert } from '@mui
 import { useNavigate } from 'react-router-dom';
 import { getAllEmployees } from '../services/employeeService';
 import { getAllDepartments } from '../services/departmentService';
-
+//This is just for test 
 const Profile = ({ theme }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
