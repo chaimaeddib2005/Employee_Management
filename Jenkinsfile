@@ -173,18 +173,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis Frontend') {
-            steps {
-                script {
-                    // Only if you have sonar-project.properties in frontend
-                    withSonarQubeEnv('sonar') {
-                        dir('frontend') {
-                            sh 'sonar-scanner'
-                        }
-                    }
-                }
-            }
-        }
+      
         
         stage('Archive Artifacts') {
             steps {
