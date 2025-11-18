@@ -3,7 +3,7 @@ pipeline {
     
     // Environment variables
     environment {
-        JAVA_HOME = tool 'JDK11'  // or your configured JDK
+        JAVA_HOME = tool 'JDK17'  // or your configured JDK
         PATH = "${JAVA_HOME}/bin:${PATH}"
         NODE_VERSION = '16'  // Specify Node version
         WORKSPACE_DIR = "${WORKSPACE}"
