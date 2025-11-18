@@ -4,8 +4,8 @@ pipeline {
     environment {
         MAVEN_HOME = tool name: 'Maven', type: 'maven'
         JAVA_HOME = tool name: 'JDK11', type: 'jdk'
-        NODE_HOME = tool name: 'NodeJS', type: 'jenkins.plugins.shiningpanda.tools.NodeJSInstallation'
-        PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${NODE_HOME}/bin:${PATH}"
+        // NodeJS doesn't need tool() - npm is in PATH if NodeJS plugin is installed
+        PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
     }
     
     options {
@@ -20,13 +20,17 @@ pipeline {
                 script {
                     echo '🔍 Checking tools...'
                     sh '''
-                        echo "Java:"
+                        echo "=== Java Version ==="
                         java -version
-                        echo "\nMaven:"
+                        
+                        echo -e "\n=== Maven Version ==="
                         mvn -version
-                        echo "\nNode:"
-                        node -v
-                        npm -v
+                        
+                        echo -e "\n=== Node Version ==="
+                        node -v || echo "❌ Node not found in PATH"
+                        
+                        echo -e "\n=== NPM Version ==="
+                        npm -v || echo "❌ NPM not found in PATH"
                     '''
                 }
             }
@@ -37,6 +41,48 @@ pipeline {
                 script {
                     echo '📥 Cloning repository...'
                     checkout scm
+                    echo '✅ Repository cloned'
+                }
+            }
+        }
+        
+        stage('Validate Structure') {
+            steps {
+                script {
+                    echo '📋 Validating project structure...'
+                    sh '''
+                        echo "Current directory: $(pwd)"
+                        echo -e "\n=== Root contents ==="
+                        ls -la
+                        
+                        echo -e "\n=== Checking backend ==="
+                        if [ -d "backend" ]; then
+                            echo "✅ Backend directory exists"
+                            if [ -f "backend/pom.xml" ]; then
+                                echo "✅ backend/pom.xml found"
+                            else
+                                echo "❌ backend/pom.xml NOT found"
+                                exit 1
+                            fi
+                        else
+                            echo "❌ Backend directory NOT found"
+                            exit 1
+                        fi
+                        
+                        echo -e "\n=== Checking frontend ==="
+                        if [ -d "frontend" ]; then
+                            echo "✅ Frontend directory exists"
+                            if [ -f "frontend/package.json" ]; then
+                                echo "✅ frontend/package.json found"
+                            else
+                                echo "❌ frontend/package.json NOT found"
+                                exit 1
+                            fi
+                        else
+                            echo "❌ Frontend directory NOT found"
+                            exit 1
+                        fi
+                    '''
                 }
             }
         }
@@ -44,11 +90,27 @@ pipeline {
         stage('Build Backend') {
             steps {
                 script {
-                    echo '🔨 Building backend...'
-                    dir('backend') {
-                        sh '''
-                            mvn clean package -DskipTests
-                        '''
+                    try {
+                        echo '🔨 Building backend...'
+                        dir('backend') {
+                            sh '''
+                                echo "Running Maven clean package..."
+                                mvn clean package -DskipTests -U
+                                
+                                echo -e "\n=== Checking for JAR ==="
+                                if [ -f "target"/*.jar ]; then
+                                    echo "✅ JAR file created:"
+                                    ls -lh target/*.jar
+                                else
+                                    echo "❌ No JAR file created"
+                                    exit 1
+                                fi
+                            '''
+                        }
+                    } catch (Exception e) {
+                        echo "❌ Backend build failed: ${e.message}"
+                        currentBuild.result = 'FAILURE'
+                        error("Backend build failed")
                     }
                 }
             }
@@ -57,9 +119,10 @@ pipeline {
         stage('Test Backend') {
             steps {
                 script {
-                    echo '🧪 Running tests...'
+                    echo '🧪 Running backend tests...'
                     dir('backend') {
                         sh '''
+                            echo "Running Maven tests..."
                             mvn test || true
                         '''
                     }
@@ -70,26 +133,53 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 script {
-                    echo '🎨 Building frontend...'
-                    dir('frontend') {
-                        sh '''
-                            npm install
-                            npm run build
-                        '''
+                    try {
+                        echo '🎨 Building frontend...'
+                        dir('frontend') {
+                            sh '''
+                                echo "=== Installing dependencies ==="
+                                npm install
+                                
+                                echo -e "\n=== Building frontend ==="
+                                npm run build
+                                
+                                echo -e "\n=== Checking build output ==="
+                                if [ -d "build" ]; then
+                                    echo "✅ Frontend build directory created"
+                                    ls -la build/ | head -10
+                                elif [ -d "dist" ]; then
+                                    echo "✅ Frontend dist directory created"
+                                    ls -la dist/ | head -10
+                                else
+                                    echo "❌ Neither build nor dist directory found"
+                                    exit 1
+                                fi
+                            '''
+                        }
+                    } catch (Exception e) {
+                        echo "❌ Frontend build failed: ${e.message}"
+                        currentBuild.result = 'FAILURE'
+                        error("Frontend build failed")
                     }
                 }
             }
         }
         
-        stage('Archive') {
+        stage('Archive Artifacts') {
             steps {
                 script {
                     echo '📦 Archiving artifacts...'
-                    archiveArtifacts(
-                        artifacts: 'backend/target/*.jar,frontend/build/**',
-                        allowEmptyArchive: true,
-                        fingerprint: true
-                    )
+                    try {
+                        archiveArtifacts(
+                            artifacts: 'backend/target/*.jar,frontend/build/**,frontend/dist/**',
+                            excludes: 'backend/target/*sources.jar',
+                            allowEmptyArchive: true,
+                            fingerprint: true
+                        )
+                        echo '✅ Artifacts archived'
+                    } catch (Exception e) {
+                        echo "⚠️  Warning: Could not archive some artifacts: ${e.message}"
+                    }
                 }
             }
         }
@@ -97,15 +187,24 @@ pipeline {
     
     post {
         always {
-            echo '✅ Build finished'
+            echo '🧹 Cleanup...'
         }
         
         success {
-            echo '✅ Build SUCCESSFUL!'
+            echo '✅ BUILD SUCCESSFUL! 🎉'
         }
         
         failure {
-            echo '❌ Build FAILED!'
+            echo '❌ BUILD FAILED! ❌'
+            script {
+                sh '''
+                    echo "=== Build Failed Summary ==="
+                    echo "Check workspace: /var/lib/jenkins/workspace/Employees_Manager"
+                    echo "To debug, SSH to Jenkins server and check:"
+                    echo "  - Backend: ls -la backend/target/"
+                    echo "  - Frontend: ls -la frontend/build/"
+                '''
+            }
         }
     }
 }
