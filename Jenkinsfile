@@ -4,7 +4,6 @@ pipeline {
     environment {
         MAVEN_HOME = tool name: 'Maven', type: 'maven'
         JAVA_HOME = tool name: 'JDK11', type: 'jdk'
-        // NodeJS doesn't need tool() - npm is in PATH if NodeJS plugin is installed
         PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
     }
     
@@ -22,13 +21,10 @@ pipeline {
                     sh '''
                         echo "=== Java Version ==="
                         java -version
-                        
                         echo -e "\n=== Maven Version ==="
                         mvn -version
-                        
                         echo -e "\n=== Node Version ==="
                         node -v || echo "❌ Node not found in PATH"
-                        
                         echo -e "\n=== NPM Version ==="
                         npm -v || echo "❌ NPM not found in PATH"
                     '''
@@ -115,7 +111,19 @@ pipeline {
                 }
             }
         }
-        
+
+        stage('SonarQube Analysis Backend') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar') { // the name of your SonarQube server in Jenkins
+                        dir('backend') {
+                            sh 'mvn sonar:sonar'
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Test Backend') {
             steps {
                 script {
@@ -160,6 +168,19 @@ pipeline {
                         echo "❌ Frontend build failed: ${e.message}"
                         currentBuild.result = 'FAILURE'
                         error("Frontend build failed")
+                    }
+                }
+            }
+        }
+
+        stage('SonarQube Analysis Frontend') {
+            steps {
+                script {
+                    // Only if you have sonar-project.properties in frontend
+                    withSonarQubeEnv('sonar') {
+                        dir('frontend') {
+                            sh 'sonar-scanner'
+                        }
                     }
                 }
             }
