@@ -5,14 +5,15 @@ pipeline {
         MAVEN_HOME = tool name: 'Maven', type: 'maven'
         JAVA_HOME = tool name: 'JDK17', type: 'jdk'
         PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
+        DOCKERHUB_USERNAME = 'MissWolf4'
     }
-    
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         timeout(time: 2, unit: 'HOURS')
         timestamps()
     }
-    
+
     stages {
         stage('Verify Tools') {
             steps {
@@ -21,17 +22,19 @@ pipeline {
                     sh '''
                         echo "=== Java Version ==="
                         java -version
-                        echo -e "\n=== Maven Version ==="
+                        echo -e "\\n=== Maven Version ==="
                         mvn -version
-                        echo -e "\n=== Node Version ==="
+                        echo -e "\\n=== Node Version ==="
                         node -v || echo "❌ Node not found in PATH"
-                        echo -e "\n=== NPM Version ==="
+                        echo -e "\\n=== NPM Version ==="
                         npm -v || echo "❌ NPM not found in PATH"
+                        echo -e "\\n=== Docker Version ==="
+                        docker --version || echo "❌ Docker not found in PATH"
                     '''
                 }
             }
         }
-        
+
         stage('Checkout') {
             steps {
                 script {
@@ -41,17 +44,17 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Validate Structure') {
             steps {
                 script {
                     echo '📋 Validating project structure...'
                     sh '''
                         echo "Current directory: $(pwd)"
-                        echo -e "\n=== Root contents ==="
+                        echo -e "\\n=== Root contents ==="
                         ls -la
-                        
-                        echo -e "\n=== Checking backend ==="
+
+                        echo -e "\\n=== Checking backend ==="
                         if [ -d "backend" ]; then
                             echo "✅ Backend directory exists"
                             if [ -f "backend/pom.xml" ]; then
@@ -64,8 +67,8 @@ pipeline {
                             echo "❌ Backend directory NOT found"
                             exit 1
                         fi
-                        
-                        echo -e "\n=== Checking frontend ==="
+
+                        echo -e "\\n=== Checking frontend ==="
                         if [ -d "frontend" ]; then
                             echo "✅ Frontend directory exists"
                             if [ -f "frontend/package.json" ]; then
@@ -82,28 +85,6 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Images') {
-            steps {
-                script {
-                    echo '🐳 Building Docker images...'
-
-                    echo "=== Building backend image ==="
-                    sh '''
-                        docker build -t employees-backend:latest backend
-                    '''
-
-                    echo "=== Building frontend image ==="
-                    sh '''
-                        docker build -t employees-frontend:latest frontend
-                    '''
-
-                    echo "=== Docker Images ==="
-                    sh "docker images | grep employees"
-
-                    echo '✅ Docker images built successfully'
-                }
-            }
-        }
 
         stage('Build Backend') {
             steps {
@@ -114,8 +95,8 @@ pipeline {
                             sh '''
                                 echo "Running Maven clean package..."
                                 mvn clean package -DskipTests -U
-                                
-                                echo -e "\n=== Checking for JAR ==="
+
+                                echo -e "\\n=== Checking for JAR ==="
                                 if [ -f "target"/*.jar ]; then
                                     echo "✅ JAR file created:"
                                     ls -lh target/*.jar
@@ -137,7 +118,7 @@ pipeline {
         stage('SonarQube Analysis Backend') {
             steps {
                 script {
-                    withSonarQubeEnv('sonar') { // the name of your SonarQube server in Jenkins
+                    withSonarQubeEnv('sonar') {
                         dir('backend') {
                             sh 'mvn sonar:sonar'
                         }
@@ -159,7 +140,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Build Frontend') {
             steps {
                 script {
@@ -169,11 +150,11 @@ pipeline {
                             sh '''
                                 echo "=== Installing dependencies ==="
                                 npm install
-                                
-                                echo -e "\n=== Building frontend ==="
+
+                                echo -e "\\n=== Building frontend ==="
                                 npm run build
-                                
-                                echo -e "\n=== Checking build output ==="
+
+                                echo -e "\\n=== Checking build output ==="
                                 if [ -d "build" ]; then
                                     echo "✅ Frontend build directory created"
                                     ls -la build/ | head -10
@@ -195,8 +176,6 @@ pipeline {
             }
         }
 
-      
-        
         stage('Archive Artifacts') {
             steps {
                 script {
@@ -210,26 +189,66 @@ pipeline {
                         )
                         echo '✅ Artifacts archived'
                     } catch (Exception e) {
-                        echo "⚠️  Warning: Could not archive some artifacts: ${e.message}"
+                        echo "⚠️ Warning: Could not archive some artifacts: ${e.message}"
                     }
                 }
             }
         }
 
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    echo '🐳 Building Docker images...'
+
+                    // Backend image
+                    sh 'docker build -t employees-backend:latest ./backend'
+
+                    // Frontend image
+                    sh 'docker build -t employees-frontend:latest ./frontend'
+
+                    echo '✅ Docker images built successfully'
+                }
+            }
+        }
+
+        stage('Publish Docker Images') {
+            steps {
+                script {
+                    echo '📤 Publishing Docker images to Docker Hub...'
+
+                    // Login to Docker Hub
+                    sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+
+                    // Tag images
+                    sh '''
+                        docker tag employees-backend:latest $DOCKERHUB_USERNAME/employees-backend:latest
+                        docker tag employees-frontend:latest $DOCKERHUB_USERNAME/employees-frontend:latest
+                    '''
+
+                    // Push images
+                    sh '''
+                        docker push $DOCKERHUB_USERNAME/employees-backend:latest
+                        docker push $DOCKERHUB_USERNAME/employees-frontend:latest
+                    '''
+
+                    echo '✅ Docker images pushed to Docker Hub successfully'
+                }
+            }
+        }
 
     }
-    
+
     post {
         always {
             echo '🧹 Cleanup...'
         }
-        
+
         success {
             echo '✅ BUILD SUCCESSFUL! 🎉'
         }
-        
+
         failure {
-            echo '❌ BUILD FAILED   ! ❌'
+            echo '❌ BUILD FAILED! ❌'
             script {
                 sh '''
                     echo "=== Build Failed Summary ==="
