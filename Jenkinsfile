@@ -193,6 +193,37 @@ pipeline {
                 }
             }
         }
+        stage('Build Docker Images') {
+            agent {
+                docker { image 'docker:latest' args '-v /var/run/docker.sock:/var/run/docker.sock' }
+            }
+            steps {
+                script {
+                    echo '🐳 Building Docker images...'
+
+                    // Backend image
+                    sh '''
+                        echo "=== Building backend image ==="
+                        docker build -t employees-backend:latest ./backend
+                    '''
+
+                    // Frontend image
+                    sh '''
+                        echo "=== Building frontend image ==="
+                        docker build -t employees-frontend:latest ./frontend
+                    '''
+
+                    // Show images created
+                    sh '''
+                        echo "\n=== Docker Images ==="
+                        docker images | grep "employees"
+                    '''
+
+                    echo '✅ Docker images built successfully'
+                }
+            }
+        }
+
     }
     
     post {
