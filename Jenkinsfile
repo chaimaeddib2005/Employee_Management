@@ -205,7 +205,7 @@ pipeline {
         }
         
         failure {
-            echo '❌ BUILD FAILED! ❌'
+            echo '❌ BUILD FAILED   ! ❌'
             script {
                 sh '''
                     echo "=== Build Failed Summary ==="
