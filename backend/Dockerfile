@@ -1,5 +1,5 @@
 # Use Maven to build the application
-FROM maven:3.8.6-openjdk-11 AS builder
+FROM maven:3.8.6-openjdk-17 AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=builder /app/target/employee-management-app-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the application port
-EXPOSE 8080
+EXPOSE 8081
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
@@ -37,7 +37,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 # docker build --platform linux/amd64 -t hoangsonw/employee-management-app .
 # This builds the Docker image ready for Render deployment.
 #
-# docker run -p 8080:8080 \
+# docker run -p 8081:8081 \
   #  -e MYSQL_HOST=mysql-host \
   #  -e MYSQL_PORT=3306 \
   #  -e MYSQL_DB=your-db \
