@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    image: hoangsonw/employee-management-app:latest
+    build:
+      context: ./backend
+    ports:
+      - "8081:8081"    # Host 8081 → container 8081
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: employee_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile  # Make sure your frontend Dockerfile exists
+    ports:
+      - "3000:80"      # Host 3000 → container 80 (nginx serves files on 80)
+    depends_on:
+      - backend
+
+  mysql:
+    image: mysql:8
+    container_name: employee-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: employee_db
+    ports:
+      - "3306:3306"
