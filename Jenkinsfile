@@ -216,25 +216,28 @@ pipeline {
                 script {
                     echo '📤 Publishing Docker images to Docker Hub...'
 
-                    // Login to Docker Hub
-                    sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        // Login
+                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
 
-                    // Tag images
-                    sh '''
-                        docker tag employees-backend:latest $DOCKERHUB_USERNAME/employees-backend:latest
-                        docker tag employees-frontend:latest $DOCKERHUB_USERNAME/employees-frontend:latest
-                    '''
+                        // Tag images
+                        sh '''
+                            docker tag employees-backend:latest $DOCKER_USER/employees-backend:latest
+                            docker tag employees-frontend:latest $DOCKER_USER/employees-frontend:latest
+                        '''
 
-                    // Push images
-                    sh '''
-                        docker push $DOCKERHUB_USERNAME/employees-backend:latest
-                        docker push $DOCKERHUB_USERNAME/employees-frontend:latest
-                    '''
+                        // Push images
+                        sh '''
+                            docker push $DOCKER_USER/employees-backend:latest
+                            docker push $DOCKER_USER/employees-frontend:latest
+                        '''
+                    }
 
                     echo '✅ Docker images pushed to Docker Hub successfully'
                 }
             }
         }
+
 
     }
 
