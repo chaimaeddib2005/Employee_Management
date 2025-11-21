@@ -5,7 +5,7 @@ pipeline {
         MAVEN_HOME = tool name: 'Maven', type: 'maven'
         JAVA_HOME = tool name: 'JDK17', type: 'jdk'
         PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
-        DOCKERHUB_USERNAME = 'MissWolf4'
+        DOCKERHUB_USERNAME = 'misswolf4'
     }
 
     options {
