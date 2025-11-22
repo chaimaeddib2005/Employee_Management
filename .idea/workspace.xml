@@ -5,6 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="392f4aef-37aa-47a3-a82b-22f4f510a7b8" name="Changes" comment="feat(terraform): add Terraform configurations for AWS infrastructure and Kubernetes deployment">
+      <change afterPath="$PROJECT_DIR$/Kubernetes/backend-deploiment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Kubernetes/backend-service.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Kubernetes/frontend-deploiment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Kubernetes/frontend-service.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -89,7 +93,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.EmployeeManagementApplication.executor": "Run",
-    "git-widget-placeholder": "TestBranch",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/davidnguyen/IdeaProjects/Employee-Management/frontend/public",
     "node.js.detected.package.eslint": "true",
@@ -237,7 +241,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
       </set>
     </attachedChunks>
   </component>
