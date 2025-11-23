@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DepartmentController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Employee Management Application</a> &gt; <a href="index.source.html" class="el_package">com.example.employeemanagement.controller</a> &gt; <span class="el_source">DepartmentController.java</span></div><h1>DepartmentController.java</h1><pre class="source lang-java linenums">package com.example.employeemanagement.controller;
+
+import com.example.employeemanagement.exception.ResourceNotFoundException;
+import com.example.employeemanagement.model.Department;
+import com.example.employeemanagement.service.DepartmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+/** This class represents the REST API controller for departments. */
+@RestController
+@RequestMapping(&quot;/api/departments&quot;)
+@CrossOrigin(origins = &quot;http://localhost:3000&quot;)
+@Tag(name = &quot;Department APIs&quot;, description = &quot;API Operations related to managing departments&quot;)
+<span class="nc" id="L21">public class DepartmentController {</span>
+
+  /** The department service. */
+  @Autowired private DepartmentService departmentService;
+
+  /**
+   * Get all departments API.
+   *
+   * @return List of all departments
+   */
+  @Operation(summary = &quot;Get all departments&quot;, description = &quot;Retrieve a list of all departments&quot;)
+  @GetMapping
+  public List&lt;Department&gt; getAllDepartments() {
+<span class="nc" id="L34">    return departmentService.getAllDepartments();</span>
+  }
+
+  /**
+   * Get department by ID API.
+   *
+   * @param id ID of the department to be retrieved
+   * @return Department with the specified ID
+   */
+  @Operation(
+      summary = &quot;Get department by ID&quot;,
+      description = &quot;Retrieve a specific department by its ID&quot;)
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Department found&quot;),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Department not found&quot;)
+      })
+  @GetMapping(&quot;/{id}&quot;)
+  public ResponseEntity&lt;Department&gt; getDepartmentById(
+      @Parameter(description = &quot;ID of the department to be retrieved&quot;) @PathVariable Long id) {
+<span class="nc" id="L54">    Department department =</span>
+        departmentService
+<span class="nc" id="L56">            .getDepartmentById(id)</span>
+<span class="nc" id="L57">            .orElseThrow(</span>
+<span class="nc" id="L58">                () -&gt; new ResourceNotFoundException(&quot;Department not found with id: &quot; + id));</span>
+<span class="nc" id="L59">    return ResponseEntity.ok(department);</span>
+  }
+
+  /**
+   * Create a new department API.
+   *
+   * @param department Department object to be created
+   * @return Created department object
+   */
+  @Operation(summary = &quot;Create a new department&quot;, description = &quot;Create a new department record&quot;)
+  @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Department created successfully&quot;)
+  @PostMapping
+  public Department createDepartment(@RequestBody Department department) {
+<span class="nc" id="L72">    return departmentService.saveDepartment(department);</span>
+  }
+
+  /**
+   * Update an existing department API.
+   *
+   * @param id ID of the department to be updated
+   * @param departmentDetails Updated department object
+   * @return Updated department object
+   */
+  @Operation(
+      summary = &quot;Update an existing department&quot;,
+      description = &quot;Update an existing department's details&quot;)
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Department updated&quot;),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Department not found&quot;)
+      })
+  @PutMapping(&quot;/{id}&quot;)
+  public ResponseEntity&lt;Department&gt; updateDepartment(
+      @Parameter(description = &quot;ID of the department to be updated&quot;) @PathVariable Long id,
+      @RequestBody Department departmentDetails) {
+<span class="nc" id="L94">    Department department =</span>
+        departmentService
+<span class="nc" id="L96">            .getDepartmentById(id)</span>
+<span class="nc" id="L97">            .orElseThrow(</span>
+<span class="nc" id="L98">                () -&gt; new ResourceNotFoundException(&quot;Department not found with id: &quot; + id));</span>
+
+<span class="nc" id="L100">    department.setName(departmentDetails.getName());</span>
+
+<span class="nc" id="L102">    Department updatedDepartment = departmentService.saveDepartment(department);</span>
+<span class="nc" id="L103">    return ResponseEntity.ok(updatedDepartment);</span>
+  }
+
+  /**
+   * Delete a department API.
+   *
+   * @param id ID of the department to be deleted
+   * @return Response entity with no content
+   */
+  @Operation(summary = &quot;Delete a department&quot;, description = &quot;Delete a department record by ID&quot;)
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Department deleted&quot;),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Department not found&quot;)
+      })
+  @DeleteMapping(&quot;/{id}&quot;)
+  public ResponseEntity&lt;Void&gt; deleteDepartment(
+      @Parameter(description = &quot;ID of the department to be deleted&quot;) @PathVariable Long id) {
+<span class="nc" id="L121">    Department department =</span>
+        departmentService
+<span class="nc" id="L123">            .getDepartmentById(id)</span>
+<span class="nc" id="L124">            .orElseThrow(</span>
+<span class="nc" id="L125">                () -&gt; new ResourceNotFoundException(&quot;Department not found with id: &quot; + id));</span>
+
+<span class="nc" id="L127">    departmentService.deleteDepartment(id);</span>
+<span class="nc" id="L128">    return ResponseEntity.noContent().build();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

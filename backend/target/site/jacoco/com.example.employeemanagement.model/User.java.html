@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Employee Management Application</a> &gt; <a href="index.source.html" class="el_package">com.example.employeemanagement.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.example.employeemanagement.model;
+
+import javax.persistence.*;
+
+/** This class represents the user entity. */
+@Entity
+@Table(name = &quot;users&quot;)
+<span class="fc" id="L8">public class User {</span>
+
+  /** The user ID. */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  /** The username. */
+  @Column(nullable = false, unique = true)
+  private String username;
+
+  /** The password. */
+  @Column(nullable = false)
+  private String password;
+
+  // Getters and Setters
+
+  /**
+   * Gets the user ID.
+   *
+   * @return The user ID
+   */
+  public Long getId() {
+<span class="nc" id="L31">    return id;</span>
+  }
+
+  /**
+   * Sets the user ID.
+   *
+   * @param id The user ID
+   */
+  public void setId(Long id) {
+<span class="nc" id="L40">    this.id = id;</span>
+<span class="nc" id="L41">  }</span>
+
+  /**
+   * Gets the username.
+   *
+   * @return The username
+   */
+  public String getUsername() {
+<span class="nc" id="L49">    return username;</span>
+  }
+
+  /**
+   * Sets the username.
+   *
+   * @param username The username
+   */
+  public void setUsername(String username) {
+<span class="nc" id="L58">    this.username = username;</span>
+<span class="nc" id="L59">  }</span>
+
+  /**
+   * Gets the password.
+   *
+   * @return The password
+   */
+  public String getPassword() {
+<span class="nc" id="L67">    return password;</span>
+  }
+
+  /**
+   * Sets the password.
+   *
+   * @param password The password
+   */
+  public void setPassword(String password) {
+<span class="nc" id="L76">    this.password = password;</span>
+<span class="nc" id="L77">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

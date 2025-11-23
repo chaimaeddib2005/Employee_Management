@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Employee.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Employee Management Application</a> &gt; <a href="index.source.html" class="el_package">com.example.employeemanagement.model</a> &gt; <span class="el_source">Employee.java</span></div><h1>Employee.java</h1><pre class="source lang-java linenums">package com.example.employeemanagement.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import javax.persistence.*;
+
+/**
+ * This class represents an Employee entity. Each employee has an ID, first name, last name, email,
+ * department, and age.
+ */
+<span class="pc bnc" id="L13" title="All 48 branches missed.">@Data</span>
+<span class="fc" id="L14">@NoArgsConstructor</span>
+<span class="nc" id="L15">@AllArgsConstructor</span>
+@Entity
+@Table(name = &quot;employees&quot;)
+public class Employee {
+
+  /** The ID of the employee. It is unique and generated automatically. */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L23">  private Long id;</span>
+
+  /** The first name of the employee. */
+<span class="fc" id="L26">  private String firstName;</span>
+
+  /** The last name of the employee. */
+<span class="nc" id="L29">  private String lastName;</span>
+
+  /** The email of the employee. */
+<span class="nc" id="L32">  private String email;</span>
+
+  /** The department of the employee. */
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = &quot;department_id&quot;, nullable = false)
+  @JsonBackReference
+<span class="fc" id="L38">  private Department department;</span>
+
+  /** The age of the employee. */
+<span class="nc" id="L41">  private int age;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

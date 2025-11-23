@@ -1,0 +1,19 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Employee Management Application,com.example.employeemanagement.security,CustomUserDetailsService,29,0,0,0,4,0,3,0,3,0
+Employee Management Application,com.example.employeemanagement.security,JwtRequestFilter,67,0,10,0,16,0,7,0,2,0
+Employee Management Application,com.example.employeemanagement.security,JwtTokenUtil,82,0,4,0,16,0,10,0,8,0
+Employee Management Application,com.example.employeemanagement.security,SecurityConfig,29,0,0,0,11,0,5,0,5,0
+Employee Management Application,com.example.employeemanagement.service,DepartmentService,23,0,0,0,6,0,5,0,5,0
+Employee Management Application,com.example.employeemanagement.service,EmployeeService,23,0,0,0,6,0,5,0,5,0
+Employee Management Application,com.example.employeemanagement.model,Employee,252,28,48,0,4,5,34,8,10,8
+Employee Management Application,com.example.employeemanagement.model,Department,155,13,30,0,2,4,23,4,8,4
+Employee Management Application,com.example.employeemanagement.model,User,21,3,0,0,9,1,6,1,6,1
+Employee Management Application,com.example.employeemanagement,EmployeeManagementApplication,5,30,0,0,2,9,1,2,1,2
+Employee Management Application,com.example.employeemanagement.config,CorsConfig.new WebMvcConfigurer() {...},46,0,0,0,8,0,2,0,2,0
+Employee Management Application,com.example.employeemanagement.config,DataInitializer,113,0,4,0,23,0,4,0,2,0
+Employee Management Application,com.example.employeemanagement.config,CorsConfig,8,0,0,0,2,0,2,0,2,0
+Employee Management Application,com.example.employeemanagement.controller,EmployeeController,95,0,0,0,22,0,9,0,9,0
+Employee Management Application,com.example.employeemanagement.controller,AuthController,134,0,4,0,32,0,7,0,5,0
+Employee Management Application,com.example.employeemanagement.controller,HomeController,5,0,0,0,2,0,2,0,2,0
+Employee Management Application,com.example.employeemanagement.controller,DepartmentController,79,0,0,0,21,0,9,0,9,0
+Employee Management Application,com.example.employeemanagement.exception,ResourceNotFoundException,4,0,0,0,2,0,1,0,1,0

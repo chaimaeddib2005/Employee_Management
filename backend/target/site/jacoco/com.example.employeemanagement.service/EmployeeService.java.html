@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Employee Management Application</a> &gt; <a href="index.source.html" class="el_package">com.example.employeemanagement.service</a> &gt; <span class="el_source">EmployeeService.java</span></div><h1>EmployeeService.java</h1><pre class="source lang-java linenums">package com.example.employeemanagement.service;
+
+import com.example.employeemanagement.model.Employee;
+import com.example.employeemanagement.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+/** This class represents the service for employees. */
+@Service
+<span class="nc" id="L13">public class EmployeeService {</span>
+
+  /** The employee repository. */
+  @Autowired private EmployeeRepository employeeRepository;
+
+  /**
+   * Get all employees.
+   *
+   * @return List of all employees
+   */
+  public List&lt;Employee&gt; getAllEmployees() {
+<span class="nc" id="L24">    return employeeRepository.findAllWithDepartments();</span>
+  }
+
+  /**
+   * Get employee by ID.
+   *
+   * @param id ID of the employee to be retrieved
+   * @return Employee with the specified ID
+   */
+  public Optional&lt;Employee&gt; getEmployeeById(Long id) {
+<span class="nc" id="L34">    return employeeRepository.findById(id);</span>
+  }
+
+  /**
+   * Save an employee.
+   *
+   * @param employee Employee to be saved
+   * @return Saved employee
+   */
+  public Employee saveEmployee(Employee employee) {
+<span class="nc" id="L44">    return employeeRepository.save(employee);</span>
+  }
+
+  /**
+   * Update an employee.
+   *
+   * @param id ID of the employee to be updated
+   */
+  public void deleteEmployee(Long id) {
+<span class="nc" id="L53">    employeeRepository.deleteById(id);</span>
+<span class="nc" id="L54">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

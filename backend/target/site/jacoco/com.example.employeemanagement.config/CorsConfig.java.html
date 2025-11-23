@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CorsConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Employee Management Application</a> &gt; <a href="index.source.html" class="el_package">com.example.employeemanagement.config</a> &gt; <span class="el_source">CorsConfig.java</span></div><h1>CorsConfig.java</h1><pre class="source lang-java linenums">package com.example.employeemanagement.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+/** This class represents the configuration for CORS. */
+@Configuration
+<span class="nc" id="L10">public class CorsConfig {</span>
+
+  /**
+   * Configure CORS. This is done by adding a CORS mapping that allows requests from all origins
+   * using allowedOriginPatterns.
+   *
+   * @return WebMvcConfigurer
+   */
+  @Bean
+  public WebMvcConfigurer corsConfigurer() {
+
+    // Add CORS mappings
+<span class="nc" id="L22">    return new WebMvcConfigurer() {</span>
+
+      /**
+       * Add CORS mappings.
+       *
+       * @param registry CORS registry
+       */
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+<span class="nc" id="L31">        registry</span>
+<span class="nc" id="L32">            .addMapping(&quot;/**&quot;)</span>
+<span class="nc" id="L33">            .allowedOriginPatterns(&quot;*&quot;) // Allows all origins with patterns</span>
+<span class="nc" id="L34">            .allowedMethods(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;) // List all allowed HTTP methods</span>
+<span class="nc" id="L35">            .allowedHeaders(&quot;*&quot;) // Allows all headers</span>
+<span class="nc" id="L36">            .allowCredentials(true); // Allow credentials (cookies, etc.)</span>
+<span class="nc" id="L37">      }</span>
+    };
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -114,32 +114,36 @@ pipeline {
                 }
             }
         }
-
+        stage('Test Backend') {
+                    steps {
+                        script {
+                            echo '🧪 Running backend tests...'
+                            dir('backend') {
+                                sh '''
+                                    echo "Running Maven tests..."
+                                    mvn test || true
+                                '''
+                            }
+                        }
+                    }
+                }
         stage('SonarQube Analysis Backend') {
             steps {
                 script {
                     withSonarQubeEnv('sonar') {
                         dir('backend') {
-                            sh 'mvn sonar:sonar'
+                            sh """
+                                mvn sonar:sonar \
+                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                            """
                         }
                     }
                 }
             }
         }
 
-        stage('Test Backend') {
-            steps {
-                script {
-                    echo '🧪 Running backend tests...'
-                    dir('backend') {
-                        sh '''
-                            echo "Running Maven tests..."
-                            mvn test || true
-                        '''
-                    }
-                }
-            }
-        }
+
+
 
         stage('Build Frontend') {
             steps {
@@ -242,6 +246,14 @@ pipeline {
               sh 'kubectl apply -f Kubernetes/.'
           }
       }
+    stage('Deploy Monitoring') {
+        steps {
+            sh '''
+            helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+                --namespace monitoring --create-namespace
+            '''
+        }
+    }
 
 
     }

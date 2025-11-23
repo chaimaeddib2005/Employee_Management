@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeManagementApplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Employee Management Application</a> &gt; <a href="index.source.html" class="el_package">com.example.employeemanagement</a> &gt; <span class="el_source">EmployeeManagementApplication.java</span></div><h1>EmployeeManagementApplication.java</h1><pre class="source lang-java linenums">package com.example.employeemanagement;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+// Using the fully qualified name for SecurityScheme to avoid conflict
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+@OpenAPIDefinition(
+    info = @Info(
+        title = &quot;Employee Management System API&quot;,
+        version = &quot;1.0.0&quot;,
+        description = &quot;API documentation for managing employees and departments&quot;,
+        contact = @Contact(
+            name = &quot;Employee Management System&quot;,
+            email = &quot;hoangson091104@gmail.com&quot;,
+            url = &quot;https://employee-management-fullstack-app.vercel.app/&quot;
+        ),
+        license = @License(
+            name = &quot;MIT License&quot;,
+            url = &quot;https://opensource.org/licenses/MIT&quot;
+        ),
+        termsOfService = &quot;https://employee-management-fullstack-app.vercel.app/&quot;
+    )
+)
+@SecurityScheme(
+    name = &quot;bearerAuth&quot;,
+    type = SecuritySchemeType.HTTP,
+    scheme = &quot;bearer&quot;,
+    bearerFormat = &quot;JWT&quot;,
+    description = &quot;JWT Authorization header using the Bearer scheme&quot;
+)
+<span class="fc" id="L42">public class EmployeeManagementApplication {</span>
+
+  /**
+   * The main entry point of the application.
+   *
+   * @param args Command-line arguments
+   */
+  public static void main(String[] args) {
+<span class="nc" id="L50">    SpringApplication.run(EmployeeManagementApplication.class, args);</span>
+<span class="nc" id="L51">  }</span>
+
+  /**
+   * Configure OpenAPI with JWT Bearer authentication.
+   *
+   * @return OpenAPI custom configuration.
+   */
+  @Bean
+  public OpenAPI customOpenAPI() {
+<span class="fc" id="L60">    return new OpenAPI()</span>
+        // Add security requirement globally
+<span class="fc" id="L62">        .addSecurityItem(new SecurityRequirement().addList(&quot;bearerAuth&quot;))</span>
+<span class="fc" id="L63">        .components(new Components()</span>
+            // Fully qualified name for SecurityScheme to avoid name conflict
+<span class="fc" id="L65">            .addSecuritySchemes(&quot;bearerAuth&quot;,</span>
+                new io.swagger.v3.oas.models.security.SecurityScheme()
+<span class="fc" id="L67">                    .name(&quot;bearerAuth&quot;)</span>
+<span class="fc" id="L68">                    .type(io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP)</span>
+<span class="fc" id="L69">                    .scheme(&quot;bearer&quot;)</span>
+<span class="fc" id="L70">                    .bearerFormat(&quot;JWT&quot;)));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

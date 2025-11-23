@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Employee Management Application</a> &gt; <a href="index.source.html" class="el_package">com.example.employeemanagement.security</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">package com.example.employeemanagement.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+/** This class represents the security configuration. */
+@EnableWebSecurity
+<span class="nc" id="L16">public class SecurityConfig extends WebSecurityConfigurerAdapter {</span>
+
+  /** The user details service. */
+  @Autowired private UserDetailsService userDetailsService;
+
+  /**
+   * Configure authentication.
+   *
+   * @param auth The authentication manager builder
+   * @throws Exception If an error occurs
+   */
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+<span class="nc" id="L29">    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());</span>
+<span class="nc" id="L30">  }</span>
+
+  /**
+   * Password encoder.
+   *
+   * @return The password encoder
+   */
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+<span class="nc" id="L39">    return new BCryptPasswordEncoder();</span>
+  }
+
+  /**
+   * Authentication manager bean.
+   *
+   * @return The authentication manager
+   * @throws Exception If an error occurs
+   */
+  @Override
+  @Bean
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+<span class="nc" id="L51">    return super.authenticationManagerBean();</span>
+  }
+
+  /**
+   * Configure security.
+   *
+   * @param http The HTTP security
+   * @throws Exception If an error occurs
+   */
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    // Disable authentication for all routes
+<span class="nc" id="L63">    http.csrf()</span>
+<span class="nc" id="L64">        .disable()</span>
+<span class="nc" id="L65">        .authorizeRequests()</span>
+<span class="nc" id="L66">        .anyRequest()</span>
+<span class="nc" id="L67">        .permitAll(); // Allow access to all routes without authentication (for now)</span>
+<span class="nc" id="L68">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
