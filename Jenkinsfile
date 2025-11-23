@@ -246,14 +246,18 @@ pipeline {
               sh 'kubectl apply -f Kubernetes/.'
           }
       }
-    stage('Deploy Monitoring') {
-        steps {
-            sh '''
-            helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
-                --namespace monitoring --create-namespace
-            '''
-        }
-    }
+   stage('Deploy Monitoring') {
+       steps {
+           sh '''
+               helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+               helm repo update
+
+               helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+                   --namespace monitoring --create-namespace
+           '''
+       }
+   }
+
 
 
     }
