@@ -12,10 +12,9 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 // Using the fully qualified name for SecurityScheme to avoid conflict
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-@SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
+
+@SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(
         title = "Employee Management System API",
