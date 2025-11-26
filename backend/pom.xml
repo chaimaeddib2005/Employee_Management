@@ -109,11 +109,6 @@
       </dependency>
 
 
-      <!-- MongoDB Driver -->
-    <dependency>
-      <groupId>org.mongodb</groupId>
-      <artifactId>mongodb-driver-sync</artifactId>
-    </dependency>
 
     <!-- Password Encoder (BCrypt) -->
     <dependency>
