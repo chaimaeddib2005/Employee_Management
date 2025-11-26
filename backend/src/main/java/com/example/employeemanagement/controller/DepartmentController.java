@@ -21,7 +21,12 @@ import java.util.List;
 public class DepartmentController {
 
   /** The department service. */
-  @Autowired private DepartmentService departmentService;
+  private final DepartmentService departmentService;
+
+  // Constructor injection
+  public DepartmentController(DepartmentService departmentService) {
+    this.departmentService = departmentService;
+  }
 
   /**
    * Get all departments API.

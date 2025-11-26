@@ -124,14 +124,16 @@ public class AuthController {
           @ApiResponse(responseCode = "404", description = "Username not found")
       })
   @GetMapping("/verify-username/{username}")
-  public ResponseEntity<?> verifyUsername(@PathVariable String username) {
+  public ResponseEntity<String> verifyUsername(@PathVariable String username) {
     Optional<User> user = userRepository.findByUsername(username);
     if (user.isPresent()) {
       return ResponseEntity.ok("Username exists");
     } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Username not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("Error: Username not found");
     }
   }
+
 
   /**
    * Reset password for a given username.
