@@ -11,6 +11,10 @@ spec:
     metadata:
       labels:
         app: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8082"
     spec:
       containers:
         - name: backend
@@ -20,15 +24,11 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
-
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://mysql:3306/employees"
-
+              value: "jdbc:mysql://mysql:3306/employee_db"
             - name: SPRING_DATASOURCE_USERNAME
               value: "root"
-
             - name: SPRING_DATASOURCE_PASSWORD
               value: "root"
-
             - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
               value: "com.mysql.cj.jdbc.Driver"

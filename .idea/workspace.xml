@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="392f4aef-37aa-47a3-a82b-22f4f510a7b8" name="Changes" comment="feat(terraform): add Terraform configurations for AWS infrastructure and Kubernetes deployment">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Kubernetes/backend-deploiment.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Kubernetes/backend-deploiment.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
