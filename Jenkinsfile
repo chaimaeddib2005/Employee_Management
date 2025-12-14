@@ -18,18 +18,18 @@ pipeline {
         stage('Verify Tools') {
             steps {
                 script {
-                    echo '🔍 Checking tools...'
+                    echo 'Checking tools...'
                     sh '''
                         echo "=== Java Version ==="
                         java -version
                         echo -e "\\n=== Maven Version ==="
                         mvn -version
                         echo -e "\\n=== Node Version ==="
-                        node -v || echo "❌ Node not found in PATH"
+                        node -v || echo " Node not found in PATH"
                         echo -e "\\n=== NPM Version ==="
-                        npm -v || echo "❌ NPM not found in PATH"
+                        npm -v || echo " NPM not found in PATH"
                         echo -e "\\n=== Docker Version ==="
-                        docker --version || echo "❌ Docker not found in PATH"
+                        docker --version || echo " Docker not found in PATH"
                     '''
                 }
             }
@@ -38,9 +38,9 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    echo '📥 Cloning repository...'
+                    echo ' Cloning repository...'
                     checkout scm
-                    echo '✅ Repository cloned'
+                    echo ' Repository cloned'
                 }
             }
         }
@@ -48,7 +48,7 @@ pipeline {
         stage('Validate Structure') {
             steps {
                 script {
-                    echo '📋 Validating project structure...'
+                    echo ' Validating project structure...'
                     sh '''
                         echo "Current directory: $(pwd)"
                         echo -e "\\n=== Root contents ==="
@@ -56,29 +56,29 @@ pipeline {
 
                         echo -e "\\n=== Checking backend ==="
                         if [ -d "backend" ]; then
-                            echo "✅ Backend directory exists"
+                            echo " Backend directory exists"
                             if [ -f "backend/pom.xml" ]; then
-                                echo "✅ backend/pom.xml found"
+                                echo " backend/pom.xml found"
                             else
-                                echo "❌ backend/pom.xml NOT found"
+                                echo "backend/pom.xml NOT found"
                                 exit 1
                             fi
                         else
-                            echo "❌ Backend directory NOT found"
+                            echo " Backend directory NOT found"
                             exit 1
                         fi
 
                         echo -e "\\n=== Checking frontend ==="
                         if [ -d "frontend" ]; then
-                            echo "✅ Frontend directory exists"
+                            echo " Frontend directory exists"
                             if [ -f "frontend/package.json" ]; then
-                                echo "✅ frontend/package.json found"
+                                echo " frontend/package.json found"
                             else
-                                echo "❌ frontend/package.json NOT found"
+                                echo " frontend/package.json NOT found"
                                 exit 1
                             fi
                         else
-                            echo "❌ Frontend directory NOT found"
+                            echo " Frontend directory NOT found"
                             exit 1
                         fi
                     '''
@@ -98,16 +98,16 @@ pipeline {
 
                                 echo -e "\\n=== Checking for JAR ==="
                                 if [ -f "target"/*.jar ]; then
-                                    echo "✅ JAR file created:"
+                                    echo " JAR file created:"
                                     ls -lh target/*.jar
                                 else
-                                    echo "❌ No JAR file created"
+                                    echo "No JAR file created"
                                     exit 1
                                 fi
                             '''
                         }
                     } catch (Exception e) {
-                        echo "❌ Backend build failed: ${e.message}"
+                        echo " Backend build failed: ${e.message}"
                         currentBuild.result = 'FAILURE'
                         error("Backend build failed")
                     }
@@ -117,7 +117,7 @@ pipeline {
         stage('Test Backend') {
                     steps {
                         script {
-                            echo '🧪 Running backend tests...'
+                            echo ' Running backend tests...'
                             dir('backend') {
                                 sh '''
                                     echo "Running Maven tests..."
@@ -149,7 +149,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        echo '🎨 Building frontend...'
+                        echo ' Building frontend...'
                         dir('frontend') {
                             sh '''
                                 echo "=== Installing dependencies ==="
@@ -160,19 +160,19 @@ pipeline {
 
                                 echo -e "\\n=== Checking build output ==="
                                 if [ -d "build" ]; then
-                                    echo "✅ Frontend build directory created"
+                                    echo " Frontend build directory created"
                                     ls -la build/ | head -10
                                 elif [ -d "dist" ]; then
-                                    echo "✅ Frontend dist directory created"
+                                    echo " Frontend dist directory created"
                                     ls -la dist/ | head -10
                                 else
-                                    echo "❌ Neither build nor dist directory found"
+                                    echo " Neither build nor dist directory found"
                                     exit 1
                                 fi
                             '''
                         }
                     } catch (Exception e) {
-                        echo "❌ Frontend build failed: ${e.message}"
+                        echo " Frontend build failed: ${e.message}"
                         currentBuild.result = 'FAILURE'
                         error("Frontend build failed")
                     }
@@ -183,7 +183,7 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 script {
-                    echo '📦 Archiving artifacts...'
+                    echo ' Archiving artifacts...'
                     try {
                         archiveArtifacts(
                             artifacts: 'backend/target/*.jar,frontend/build/**,frontend/dist/**',
@@ -191,9 +191,9 @@ pipeline {
                             allowEmptyArchive: true,
                             fingerprint: true
                         )
-                        echo '✅ Artifacts archived'
+                        echo ' Artifacts archived'
                     } catch (Exception e) {
-                        echo "⚠️ Warning: Could not archive some artifacts: ${e.message}"
+                        echo " Warning: Could not archive some artifacts: ${e.message}"
                     }
                 }
             }
@@ -202,7 +202,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    echo '🐳 Building Docker images...'
+                    echo ' Building Docker images...'
 
                     // Backend image
                     sh 'docker build -t employees-backend:latest ./backend'
@@ -210,7 +210,7 @@ pipeline {
                     // Frontend image
                     sh 'docker build -t employees-frontend:latest ./frontend'
 
-                    echo '✅ Docker images built successfully'
+                    echo ' Docker images built successfully'
                 }
             }
         }
@@ -218,7 +218,7 @@ pipeline {
         stage('Publish Docker Images') {
             steps {
                 script {
-                    echo '📤 Publishing Docker images to Docker Hub...'
+                    echo ' Publishing Docker images to Docker Hub...'
 
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         // Login
@@ -237,7 +237,7 @@ pipeline {
                         '''
                     }
 
-                    echo '✅ Docker images pushed to Docker Hub successfully'
+                    echo ' Docker images pushed to Docker Hub successfully'
                 }
             }
         }
@@ -264,15 +264,15 @@ pipeline {
 
     post {
         always {
-            echo '🧹 Cleanup...'
+            echo ' Cleanup...'
         }
 
         success {
-            echo '✅ BUILD SUCCESSFUL! 🎉'
+            echo ' BUILD SUCCESSFUL! 🎉'
         }
 
         failure {
-            echo '❌ BUILD FAILED! ❌'
+            echo ' BUILD FAILED! ❌'
             script {
                 sh '''
                     echo "=== Build Failed Summary ==="
