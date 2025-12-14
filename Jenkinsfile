@@ -241,6 +241,19 @@ pipeline {
                 }
             }
         }
+      stage('Install NGINX Ingress Controller') {
+          steps {
+              script {
+                  echo '🔹 Installing or updating NGINX Ingress Controller...'
+                  sh '''
+                      kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.14.1/deploy/static/provider/cloud/deploy.yaml
+                      echo "Waiting for ingress-nginx controller to be ready..."
+                      kubectl rollout status deployment ingress-nginx-controller -n ingress-nginx
+                  '''
+              }
+          }
+      }
+
       stage('Deploy to Kubernetes') {
           steps {
               sh 'kubectl apply -f Kubernetes/.'
