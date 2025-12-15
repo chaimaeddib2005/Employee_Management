@@ -4,29 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="392f4aef-37aa-47a3-a82b-22f4f510a7b8" name="Changes" comment="feat(terraform): add Terraform configurations for AWS infrastructure and Kubernetes deployment">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/76561b8f-2634-437e-aa29-31d63d39bffa.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/76561b8f-2634-437e-aa29-31d63d39bffa/storage_v2/_src_/database/defaultdb.f1Z3pg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/76561b8f-2634-437e-aa29-31d63d39bffa/storage_v2/_src_/database/defaultdb.f1Z3pg/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/76561b8f-2634-437e-aa29-31d63d39bffa/storage_v2/_src_/database/defaultdb.f1Z3pg/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/76561b8f-2634-437e-aa29-31d63d39bffa/storage_v2/_src_/database/defaultdb.f1Z3pg/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f/storage_v2/_src_/schema/defaultdb.f1Z3pg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a4e18ce8-a22d-442d-9256-d25046a5be2f/storage_v2/_src_/schema/sys.zb4BAA.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b233353f-cb31-42dc-b661-3a52e8c6bd50.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b233353f-cb31-42dc-b661-3a52e8c6bd50/storage_v2/_src_/database/defaultdb.f1Z3pg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b233353f-cb31-42dc-b661-3a52e8c6bd50/storage_v2/_src_/database/defaultdb.f1Z3pg/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b233353f-cb31-42dc-b661-3a52e8c6bd50/storage_v2/_src_/database/defaultdb.f1Z3pg/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b233353f-cb31-42dc-b661-3a52e8c6bd50/storage_v2/_src_/database/defaultdb.f1Z3pg/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ee00ce6e-4310-459e-acc5-0a3098831727.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="392f4aef-37aa-47a3-a82b-22f4f510a7b8" name="Changes" comment="feat(terraform): add Terraform configurations for AWS infrastructure and Kubernetes deployment" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
