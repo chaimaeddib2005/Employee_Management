@@ -244,15 +244,23 @@ pipeline {
       stage('Install NGINX Ingress Controller') {
           steps {
               script {
-                  echo '🔹 Installing or updating NGINX Ingress Controller...'
+                  echo 'Installing or updating NGINX Ingress Controller...'
                   sh '''
+                      kubectl delete job ingress-nginx-admission-create \
+                        ingress-nginx-admission-patch \
+                        -n ingress-nginx --ignore-not-found
+
                       kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.14.1/deploy/static/provider/cloud/deploy.yaml
-                      echo "Waiting for ingress-nginx controller to be ready..."
-                      kubectl rollout status deployment ingress-nginx-controller -n ingress-nginx
+
+                      echo "Waiting for ingress-nginx controller deployment to be created..."
+                      kubectl wait --namespace ingress-nginx \
+                        --for=condition=available deployment/ingress-nginx-controller \
+                        --timeout=180s
                   '''
               }
           }
       }
+
 
       stage('Deploy to Kubernetes') {
           steps {
